@@ -50,8 +50,7 @@ public class MainActivity extends AppCompatActivity implements DownloadFile.List
         showPdfButton.setOnClickListener(view -> {
             String url = url_edit_text.getText().toString();
             if (!url.isEmpty())
-                remotePDFViewPager =
-                        new RemotePDFViewPager(this, url, this);
+                remotePDFViewPager = new RemotePDFViewPager(this, url, this);
             else
                 Toast.makeText(getApplicationContext(), "Empty URL", Toast.LENGTH_SHORT).show();
         });
@@ -60,9 +59,11 @@ public class MainActivity extends AppCompatActivity implements DownloadFile.List
     @Override
     public void onSuccess(String url, String destinationPath) {
 
-        PDFPagerAdapter adapter = new PDFPagerAdapter(this, destinationPath);
-        remotePDFViewPager.setAdapter(adapter);
-        setContentView(remotePDFViewPager);
+        if(remotePDFViewPager != null) {
+            PDFPagerAdapter adapter = new PDFPagerAdapter(this, destinationPath);
+            remotePDFViewPager.setAdapter(adapter);
+            setContentView(remotePDFViewPager);
+        }
     }
 
     @Override
@@ -89,4 +90,12 @@ public class MainActivity extends AppCompatActivity implements DownloadFile.List
                 ).withListener(snackbarMultiplePermissionsListener).check();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        PDFPagerAdapter pdfPagerAdapter = (PDFPagerAdapter) pdfViewPager.getAdapter();
+        if(pdfPagerAdapter !=null)
+            pdfPagerAdapter.close();
+    }
 }
