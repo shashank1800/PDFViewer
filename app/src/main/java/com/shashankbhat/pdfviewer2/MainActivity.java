@@ -89,10 +89,4 @@ public class MainActivity extends AppCompatActivity implements DownloadFile.List
                 ).withListener(snackbarMultiplePermissionsListener).check();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        ((PDFPagerAdapter) pdfViewPager.getAdapter()).close();
-    }
 }
